@@ -1,0 +1,233 @@
+{
+  "admission": {
+    "0": {
+      "mean_grade": 126.8209,
+      "n": 3325
+    },
+    "1": {
+      "mean_grade": 127.4537,
+      "n": 1099
+    }
+  },
+  "age_scholarship": [
+    {
+      "age_band": "21-23",
+      "n_graduate": 178,
+      "n_resolved": 351,
+      "scholarship": "0"
+    },
+    {
+      "age_band": "21-23",
+      "n_graduate": 103,
+      "n_resolved": 122,
+      "scholarship": "1"
+    },
+    {
+      "age_band": "24-26",
+      "n_graduate": 67,
+      "n_resolved": 213,
+      "scholarship": "0"
+    },
+    {
+      "age_band": "24-26",
+      "n_graduate": 26,
+      "n_resolved": 35,
+      "scholarship": "1"
+    },
+    {
+      "age_band": "27+",
+      "n_graduate": 242,
+      "n_resolved": 752,
+      "scholarship": "0"
+    },
+    {
+      "age_band": "27+",
+      "n_graduate": 55,
+      "n_resolved": 77,
+      "scholarship": "1"
+    },
+    {
+      "age_band": "<=20",
+      "n_graduate": 887,
+      "n_resolved": 1345,
+      "scholarship": "0"
+    },
+    {
+      "age_band": "<=20",
+      "n_graduate": 651,
+      "n_resolved": 735,
+      "scholarship": "1"
+    }
+  ],
+  "courses": [
+    {
+      "course": "9500",
+      "n": 766,
+      "n_dropout": 118,
+      "n_graduate": 548,
+      "n_resolved": 666
+    },
+    {
+      "course": "9147",
+      "n": 380,
+      "n_dropout": 134,
+      "n_graduate": 138,
+      "n_resolved": 272
+    },
+    {
+      "course": "9238",
+      "n": 355,
+      "n_dropout": 65,
+      "n_graduate": 248,
+      "n_resolved": 313
+    },
+    {
+      "course": "9085",
+      "n": 337,
+      "n_dropout": 90,
+      "n_graduate": 172,
+      "n_resolved": 262
+    },
+    {
+      "course": "9773",
+      "n": 331,
+      "n_dropout": 101,
+      "n_graduate": 196,
+      "n_resolved": 297
+    },
+    {
+      "course": "9670",
+      "n": 268,
+      "n_dropout": 95,
+      "n_graduate": 125,
+      "n_resolved": 220
+    },
+    {
+      "course": "9991",
+      "n": 268,
+      "n_dropout": 136,
+      "n_graduate": 78,
+      "n_resolved": 214
+    },
+    {
+      "course": "9254",
+      "n": 252,
+      "n_dropout": 96,
+      "n_graduate": 115,
+      "n_resolved": 211
+    },
+    {
+      "course": "9070",
+      "n": 226,
+      "n_dropout": 51,
+      "n_graduate": 133,
+      "n_resolved": 184
+    },
+    {
+      "course": "171",
+      "n": 215,
+      "n_dropout": 82,
+      "n_graduate": 96,
+      "n_resolved": 178
+    },
+    {
+      "course": "8014",
+      "n": 215,
+      "n_dropout": 71,
+      "n_graduate": 123,
+      "n_resolved": 194
+    },
+    {
+      "course": "9003",
+      "n": 210,
+      "n_dropout": 86,
+      "n_graduate": 87,
+      "n_resolved": 173
+    },
+    {
+      "course": "9853",
+      "n": 192,
+      "n_dropout": 85,
+      "n_graduate": 57,
+      "n_resolved": 142
+    },
+    {
+      "course": "9119",
+      "n": 170,
+      "n_dropout": 92,
+      "n_graduate": 14,
+      "n_resolved": 106
+    },
+    {
+      "course": "9130",
+      "n": 141,
+      "n_dropout": 78,
+      "n_graduate": 42,
+      "n_resolved": 120
+    },
+    {
+      "course": "9556",
+      "n": 86,
+      "n_dropout": 33,
+      "n_graduate": 36,
+      "n_resolved": 69
+    },
+    {
+      "course": "33",
+      "n": 12,
+      "n_dropout": 8,
+      "n_graduate": 1,
+      "n_resolved": 9
+    }
+  ],
+  "n": 4424,
+  "n_dropout": 1421,
+  "n_enrolled": 794,
+  "n_graduate": 2209,
+  "n_resolved": 3630,
+  "scholarship": [
+    {
+      "level": "0",
+      "n": 3325,
+      "n_dropout": 1287,
+      "n_graduate": 1374,
+      "n_resolved": 2661
+    },
+    {
+      "level": "1",
+      "n": 1099,
+      "n_dropout": 134,
+      "n_graduate": 835,
+      "n_resolved": 969
+    }
+  ],
+  "sem1": {
+    "not_enrolled": 180,
+    "some": {
+      "n_dropout": 851,
+      "n_graduate": 2132,
+      "n_resolved": 2983
+    },
+    "zero": {
+      "n_dropout": 493,
+      "n_graduate": 2,
+      "n_resolved": 495
+    }
+  },
+  "tuition": [
+    {
+      "level": "0",
+      "n": 528,
+      "n_dropout": 457,
+      "n_graduate": 29,
+      "n_resolved": 486
+    },
+    {
+      "level": "1",
+      "n": 3896,
+      "n_dropout": 964,
+      "n_graduate": 2180,
+      "n_resolved": 3144
+    }
+  ]
+}

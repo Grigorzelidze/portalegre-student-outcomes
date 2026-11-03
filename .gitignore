@@ -1,0 +1,6 @@
+.pgdata/
+data/src/
+__pycache__/
+*.pyc
+.tools/
+.DS_Store

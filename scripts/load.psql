@@ -1,0 +1,1 @@
+\copy raw.student FROM 'data/src/for_copy.csv' WITH (FORMAT csv, HEADER true, DELIMITER ';', ENCODING 'UTF8')
