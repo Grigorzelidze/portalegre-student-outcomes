@@ -182,6 +182,24 @@ def render_readme(facts):
     return text
 
 
+def bar_chart(items, label_key, with_n=False):
+    rows = []
+    for item in items:
+        shown = format(Decimal(str(item["rate"])), "f").replace(".", ",")
+        width = format(Decimal(str(item["rate"])), "f")
+        count = ""
+        if with_n:
+            count = "<span class=\"bar-n\">%s</span>" % item["n"]
+        rows.append(
+            "<div class=\"bar-row%s\">"
+            "<span class=\"bar-label\">%s</span>"
+            "<span class=\"bar-track\"><span class=\"bar-fill\" style=\"width: %s%%\"></span></span>"
+            "<span class=\"bar-value\">%s%%</span>%s</div>"
+            % (" course-row" if with_n else "", item[label_key], width, shown, count)
+        )
+    return "\n".join(rows)
+
+
 def render_dashboard(facts):
     fee0 = row(facts, "tuition", "0")
     fee1 = row(facts, "tuition", "1")
@@ -202,7 +220,7 @@ def render_dashboard(facts):
         for item in facts["courses"]
         if item["n_resolved"]
     ]
-    payload = json.dumps({"bars": bars, "courses": courses}, ensure_ascii=False)
+    courses.sort(key=lambda item: (-item["rate"], int(item["course"])))
     zero = facts["sem1"]["zero"]
     some = facts["sem1"]["some"]
     html = """<!DOCTYPE html>
@@ -211,12 +229,10 @@ def render_dashboard(facts):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Исходы студентов · открытые данные</title>
-<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <style>
-  body { margin: 0; background: #f4f1ea; color: #1c1c1c; font: 16px/1.45 Iowan Old Style, Palatino, Georgia, serif; }
-  main { max-width: 880px; margin: 0 auto; padding: 32px 20px 64px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f1ea; color: #1c1c1c; font: 16px/1.45 Iowan Old Style, Palatino, Georgia, serif; overflow-x: hidden; }
+  main { width: min(880px, 100%%); margin: 0 auto; padding: 32px 20px 64px; }
   h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
   h2 { font-size: 18px; margin: 28px 0 8px; }
   p, li { max-width: 68ch; }
@@ -224,12 +240,23 @@ def render_dashboard(facts):
   .nums { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .num { background: #fff; border: 1px solid #e2dcd0; padding: 14px 16px; }
   .num b { display: block; font-size: 34px; letter-spacing: -0.03em; }
-  table { border-collapse: collapse; width: 100%%; background: #fff; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%%; background: #fff; font-size: 14px; table-layout: fixed; }
   th, td { border-bottom: 1px solid #e2dcd0; text-align: right; padding: 6px 8px; }
   th:first-child, td:first-child { text-align: left; }
-  .chart { background: #fff; border: 1px solid #e2dcd0; padding: 8px; margin-top: 8px; }
+  .table-scroll { width: 0; min-width: 100%%; overflow-x: auto; }
+  .bars { background: #fff; border: 1px solid #e2dcd0; padding: 10px 14px; margin-top: 8px; }
+  .bar-row { display: grid; grid-template-columns: 11.5rem minmax(0, 1fr) 3.4rem; grid-template-areas: "label track value"; gap: 10px; align-items: center; margin: 8px 0; }
+  .course-row { grid-template-columns: 3.6rem minmax(0, 1fr) 3.4rem 3rem; grid-template-areas: "label track value n"; }
+  .bar-label { grid-area: label; min-width: 0; font-size: 14px; }
+  .bar-track { grid-area: track; display: block; height: 16px; background: #f4f1ea; }
+  .bar-fill { display: block; height: 16px; background: #1f4e5f; max-width: 100%%; }
+  .bar-value { grid-area: value; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .bar-n { grid-area: n; text-align: right; color: #5e594f; font-size: 13px; font-variant-numeric: tabular-nums; }
   a { color: #1f4e5f; }
-  @media (max-width: 640px) { .nums { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    .nums { grid-template-columns: 1fr; }
+    .bar-row, .course-row { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "label value n" "track track track"; }
+  }
 </style>
 </head>
 <body>
@@ -243,43 +270,18 @@ def render_dashboard(facts):
   </div>
   <h2>Плата и стипендия среди завершивших</h2>
   <p class="muted">Доля выпустившихся. Стипендия здесь не совпадает с более высоким баллом поступления: %(adm1)s против %(adm0)s.</p>
-  <div id="bars" class="chart"></div>
+  <div class="bars">@@BARS@@</div>
   <h2>Выпуск по возрасту и стипендии</h2>
   <p class="muted">Только завершившие. Разрыв остаётся в каждой строке.</p>
-  @@AGE_HTML@@
+  <div class="table-scroll">@@AGE_HTML@@</div>
   <h2>Первый семестр — не ранний сигнал</h2>
   <p>Среди завершивших, кто взял хотя бы один предмет: при нуле зачтённых отчислены %(zero_d)s из %(zero_n)s, при хотя бы одном зачтённом — %(some_d)s из %(some_n)s. Дат в файле нет, ноль и статус сняты одним снимком.</p>
   <h2>Программы</h2>
   <p class="muted">Код программы как в файле. Доля выпустившихся среди завершивших, в подписи — число завершивших. Расшифровку кодов не переписывал по памяти: она в статье Realinho и соавторов, 2022.</p>
-  <div id="courses" class="chart"></div>
+  <div class="bars">@@COURSES@@</div>
   <p class="muted">Источник: UCI Machine Learning Repository, набор 697, CC BY 4.0. %(not_enrolled)s человек без записанных предметов первого семестра в сравнение семестра не входят.</p>
   <p class="muted"><a href="https://github.com/Grigorzelidze/portalegre-student-outcomes/blob/main/docs/decisions.md">Какие чтения этого файла неверны</a></p>
 </main>
-<script>
-const VIEW = @@PAYLOAD@@;
-vegaEmbed("#bars", {
-  data: {values: VIEW.bars},
-  mark: "bar",
-  encoding: {
-    y: {field: "group", type: "nominal", sort: null, title: null, axis: {labelLimit: 220}},
-    x: {field: "rate", type: "quantitative", title: "Выпустились, %%", scale: {domain: [0, 100]}},
-    tooltip: [{field: "group"}, {field: "rate", format: ".1f"}]
-  },
-  height: 160,
-  width: "container"
-}, {actions: false});
-vegaEmbed("#courses", {
-  data: {values: VIEW.courses},
-  mark: "bar",
-  encoding: {
-    y: {field: "course", type: "nominal", sort: "-x", title: "Код программы"},
-    x: {field: "rate", type: "quantitative", title: "Выпустились, %%", scale: {domain: [0, 100]}},
-    tooltip: [{field: "course", title: "код"}, {field: "n", title: "завершившие"}, {field: "rate", title: "%%", format: ".1f"}]
-  },
-  height: 420,
-  width: "container"
-}, {actions: false});
-</script>
 </body>
 </html>
 """ % {
@@ -298,7 +300,8 @@ vegaEmbed("#courses", {
         "not_enrolled": facts["sem1"]["not_enrolled"],
     }
     html = html.replace("@@AGE_HTML@@", age_html(facts))
-    html = html.replace("@@PAYLOAD@@", payload)
+    html = html.replace("@@BARS@@", bar_chart(bars, "group"))
+    html = html.replace("@@COURSES@@", bar_chart(courses, "course", with_n=True))
     return html
 
 

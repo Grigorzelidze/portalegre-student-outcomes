@@ -4,12 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Исходы студентов · открытые данные</title>
-<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 <style>
-  body { margin: 0; background: #f4f1ea; color: #1c1c1c; font: 16px/1.45 Iowan Old Style, Palatino, Georgia, serif; }
-  main { max-width: 880px; margin: 0 auto; padding: 32px 20px 64px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #f4f1ea; color: #1c1c1c; font: 16px/1.45 Iowan Old Style, Palatino, Georgia, serif; overflow-x: hidden; }
+  main { width: min(880px, 100%); margin: 0 auto; padding: 32px 20px 64px; }
   h1 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
   h2 { font-size: 18px; margin: 28px 0 8px; }
   p, li { max-width: 68ch; }
@@ -17,12 +15,23 @@
   .nums { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
   .num { background: #fff; border: 1px solid #e2dcd0; padding: 14px 16px; }
   .num b { display: block; font-size: 34px; letter-spacing: -0.03em; }
-  table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; background: #fff; font-size: 14px; table-layout: fixed; }
   th, td { border-bottom: 1px solid #e2dcd0; text-align: right; padding: 6px 8px; }
   th:first-child, td:first-child { text-align: left; }
-  .chart { background: #fff; border: 1px solid #e2dcd0; padding: 8px; margin-top: 8px; }
+  .table-scroll { width: 0; min-width: 100%; overflow-x: auto; }
+  .bars { background: #fff; border: 1px solid #e2dcd0; padding: 10px 14px; margin-top: 8px; }
+  .bar-row { display: grid; grid-template-columns: 11.5rem minmax(0, 1fr) 3.4rem; grid-template-areas: "label track value"; gap: 10px; align-items: center; margin: 8px 0; }
+  .course-row { grid-template-columns: 3.6rem minmax(0, 1fr) 3.4rem 3rem; grid-template-areas: "label track value n"; }
+  .bar-label { grid-area: label; min-width: 0; font-size: 14px; }
+  .bar-track { grid-area: track; display: block; height: 16px; background: #f4f1ea; }
+  .bar-fill { display: block; height: 16px; background: #1f4e5f; max-width: 100%; }
+  .bar-value { grid-area: value; text-align: right; font-size: 14px; font-variant-numeric: tabular-nums; }
+  .bar-n { grid-area: n; text-align: right; color: #5e594f; font-size: 13px; font-variant-numeric: tabular-nums; }
   a { color: #1f4e5f; }
-  @media (max-width: 640px) { .nums { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) {
+    .nums { grid-template-columns: 1fr; }
+    .bar-row, .course-row { grid-template-columns: minmax(0, 1fr) auto auto; grid-template-areas: "label value n" "track track track"; }
+  }
 </style>
 </head>
 <body>
@@ -36,42 +45,36 @@
   </div>
   <h2>Плата и стипендия среди завершивших</h2>
   <p class="muted">Доля выпустившихся. Стипендия здесь не совпадает с более высоким баллом поступления: 127,45 против 126,82.</p>
-  <div id="bars" class="chart"></div>
+  <div class="bars"><div class="bar-row"><span class="bar-label">Плата не погашена</span><span class="bar-track"><span class="bar-fill" style="width: 6.0%"></span></span><span class="bar-value">6,0%</span></div>
+<div class="bar-row"><span class="bar-label">Плата погашена</span><span class="bar-track"><span class="bar-fill" style="width: 69.3%"></span></span><span class="bar-value">69,3%</span></div>
+<div class="bar-row"><span class="bar-label">Без стипендии</span><span class="bar-track"><span class="bar-fill" style="width: 51.6%"></span></span><span class="bar-value">51,6%</span></div>
+<div class="bar-row"><span class="bar-label">Стипендия</span><span class="bar-track"><span class="bar-fill" style="width: 86.2%"></span></span><span class="bar-value">86,2%</span></div></div>
   <h2>Выпуск по возрасту и стипендии</h2>
   <p class="muted">Только завершившие. Разрыв остаётся в каждой строке.</p>
-  <table><thead><tr><th>Возраст</th><th>Без стипендии</th><th>Выпуск</th><th>Со стипендией</th><th>Выпуск</th></tr></thead><tbody><tr><td><=20</td><td>1345</td><td>65,9%</td><td>735</td><td>88,6%</td></tr><tr><td>21-23</td><td>351</td><td>50,7%</td><td>122</td><td>84,4%</td></tr><tr><td>24-26</td><td>213</td><td>31,5%</td><td>35</td><td>74,3%</td></tr><tr><td>27+</td><td>752</td><td>32,2%</td><td>77</td><td>71,4%</td></tr></tbody></table>
+  <div class="table-scroll"><table><thead><tr><th>Возраст</th><th>Без стипендии</th><th>Выпуск</th><th>Со стипендией</th><th>Выпуск</th></tr></thead><tbody><tr><td><=20</td><td>1345</td><td>65,9%</td><td>735</td><td>88,6%</td></tr><tr><td>21-23</td><td>351</td><td>50,7%</td><td>122</td><td>84,4%</td></tr><tr><td>24-26</td><td>213</td><td>31,5%</td><td>35</td><td>74,3%</td></tr><tr><td>27+</td><td>752</td><td>32,2%</td><td>77</td><td>71,4%</td></tr></tbody></table></div>
   <h2>Первый семестр — не ранний сигнал</h2>
   <p>Среди завершивших, кто взял хотя бы один предмет: при нуле зачтённых отчислены 493 из 495, при хотя бы одном зачтённом — 851 из 2983. Дат в файле нет, ноль и статус сняты одним снимком.</p>
   <h2>Программы</h2>
   <p class="muted">Код программы как в файле. Доля выпустившихся среди завершивших, в подписи — число завершивших. Расшифровку кодов не переписывал по памяти: она в статье Realinho и соавторов, 2022.</p>
-  <div id="courses" class="chart"></div>
+  <div class="bars"><div class="bar-row course-row"><span class="bar-label">9500</span><span class="bar-track"><span class="bar-fill" style="width: 82.3%"></span></span><span class="bar-value">82,3%</span><span class="bar-n">666</span></div>
+<div class="bar-row course-row"><span class="bar-label">9238</span><span class="bar-track"><span class="bar-fill" style="width: 79.2%"></span></span><span class="bar-value">79,2%</span><span class="bar-n">313</span></div>
+<div class="bar-row course-row"><span class="bar-label">9070</span><span class="bar-track"><span class="bar-fill" style="width: 72.3%"></span></span><span class="bar-value">72,3%</span><span class="bar-n">184</span></div>
+<div class="bar-row course-row"><span class="bar-label">9773</span><span class="bar-track"><span class="bar-fill" style="width: 66.0%"></span></span><span class="bar-value">66,0%</span><span class="bar-n">297</span></div>
+<div class="bar-row course-row"><span class="bar-label">9085</span><span class="bar-track"><span class="bar-fill" style="width: 65.6%"></span></span><span class="bar-value">65,6%</span><span class="bar-n">262</span></div>
+<div class="bar-row course-row"><span class="bar-label">8014</span><span class="bar-track"><span class="bar-fill" style="width: 63.4%"></span></span><span class="bar-value">63,4%</span><span class="bar-n">194</span></div>
+<div class="bar-row course-row"><span class="bar-label">9670</span><span class="bar-track"><span class="bar-fill" style="width: 56.8%"></span></span><span class="bar-value">56,8%</span><span class="bar-n">220</span></div>
+<div class="bar-row course-row"><span class="bar-label">9254</span><span class="bar-track"><span class="bar-fill" style="width: 54.5%"></span></span><span class="bar-value">54,5%</span><span class="bar-n">211</span></div>
+<div class="bar-row course-row"><span class="bar-label">171</span><span class="bar-track"><span class="bar-fill" style="width: 53.9%"></span></span><span class="bar-value">53,9%</span><span class="bar-n">178</span></div>
+<div class="bar-row course-row"><span class="bar-label">9556</span><span class="bar-track"><span class="bar-fill" style="width: 52.2%"></span></span><span class="bar-value">52,2%</span><span class="bar-n">69</span></div>
+<div class="bar-row course-row"><span class="bar-label">9147</span><span class="bar-track"><span class="bar-fill" style="width: 50.7%"></span></span><span class="bar-value">50,7%</span><span class="bar-n">272</span></div>
+<div class="bar-row course-row"><span class="bar-label">9003</span><span class="bar-track"><span class="bar-fill" style="width: 50.3%"></span></span><span class="bar-value">50,3%</span><span class="bar-n">173</span></div>
+<div class="bar-row course-row"><span class="bar-label">9853</span><span class="bar-track"><span class="bar-fill" style="width: 40.1%"></span></span><span class="bar-value">40,1%</span><span class="bar-n">142</span></div>
+<div class="bar-row course-row"><span class="bar-label">9991</span><span class="bar-track"><span class="bar-fill" style="width: 36.4%"></span></span><span class="bar-value">36,4%</span><span class="bar-n">214</span></div>
+<div class="bar-row course-row"><span class="bar-label">9130</span><span class="bar-track"><span class="bar-fill" style="width: 35.0%"></span></span><span class="bar-value">35,0%</span><span class="bar-n">120</span></div>
+<div class="bar-row course-row"><span class="bar-label">9119</span><span class="bar-track"><span class="bar-fill" style="width: 13.2%"></span></span><span class="bar-value">13,2%</span><span class="bar-n">106</span></div>
+<div class="bar-row course-row"><span class="bar-label">33</span><span class="bar-track"><span class="bar-fill" style="width: 11.1%"></span></span><span class="bar-value">11,1%</span><span class="bar-n">9</span></div></div>
   <p class="muted">Источник: UCI Machine Learning Repository, набор 697, CC BY 4.0. 180 человек без записанных предметов первого семестра в сравнение семестра не входят.</p>
   <p class="muted"><a href="https://github.com/Grigorzelidze/portalegre-student-outcomes/blob/main/docs/decisions.md">Какие чтения этого файла неверны</a></p>
 </main>
-<script>
-const VIEW = {"bars": [{"group": "Плата не погашена", "rate": 6.0}, {"group": "Плата погашена", "rate": 69.3}, {"group": "Без стипендии", "rate": 51.6}, {"group": "Стипендия", "rate": 86.2}], "courses": [{"course": "9500", "rate": 82.3, "n": 666}, {"course": "9147", "rate": 50.7, "n": 272}, {"course": "9238", "rate": 79.2, "n": 313}, {"course": "9085", "rate": 65.6, "n": 262}, {"course": "9773", "rate": 66.0, "n": 297}, {"course": "9670", "rate": 56.8, "n": 220}, {"course": "9991", "rate": 36.4, "n": 214}, {"course": "9254", "rate": 54.5, "n": 211}, {"course": "9070", "rate": 72.3, "n": 184}, {"course": "171", "rate": 53.9, "n": 178}, {"course": "8014", "rate": 63.4, "n": 194}, {"course": "9003", "rate": 50.3, "n": 173}, {"course": "9853", "rate": 40.1, "n": 142}, {"course": "9119", "rate": 13.2, "n": 106}, {"course": "9130", "rate": 35.0, "n": 120}, {"course": "9556", "rate": 52.2, "n": 69}, {"course": "33", "rate": 11.1, "n": 9}]};
-vegaEmbed("#bars", {
-  data: {values: VIEW.bars},
-  mark: "bar",
-  encoding: {
-    y: {field: "group", type: "nominal", sort: null, title: null, axis: {labelLimit: 220}},
-    x: {field: "rate", type: "quantitative", title: "Выпустились, %", scale: {domain: [0, 100]}},
-    tooltip: [{field: "group"}, {field: "rate", format: ".1f"}]
-  },
-  height: 160,
-  width: "container"
-}, {actions: false});
-vegaEmbed("#courses", {
-  data: {values: VIEW.courses},
-  mark: "bar",
-  encoding: {
-    y: {field: "course", type: "nominal", sort: "-x", title: "Код программы"},
-    x: {field: "rate", type: "quantitative", title: "Выпустились, %", scale: {domain: [0, 100]}},
-    tooltip: [{field: "course", title: "код"}, {field: "n", title: "завершившие"}, {field: "rate", title: "%", format: ".1f"}]
-  },
-  height: 420,
-  width: "container"
-}, {actions: false});
-</script>
 </body>
 </html>
