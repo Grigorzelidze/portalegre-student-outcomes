@@ -12,7 +12,8 @@ From May 2023 to September 2025 I was ведущий аналитик-проек
 
 **Stack:** SQL (PostgreSQL, ClickHouse) · dbt · Prefect · Python · Yandex DataLens · Git
 
-- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных, не витрина работодателя. PostgreSQL от сырого файла до витрины, проверки останавливают сборку, рядом независимый пересчёт на pandas и CI · a study on open data, not an employer mart.
+- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных, не витрина работодателя. dbt собирает `clean` и `mart`, тесты останавливают сборку, pandas сверяет витрины, CI · a study on open data, not an employer mart.
+- [synthetic-ab-readout](https://github.com/Grigorzelidze/synthetic-ab-readout) — учебный разбор рандомизации на синтетике, не эксперимент с работы. dbt, проверка перекоса групп до метрики, интервал удержания и выручки, ранний срез не является решением · a synthetic experiment: SRM before the metric, intervals, an early slice is not the decision.
 - [Дашборд](https://grigorzelidze.github.io/portalegre-student-outcomes/) — два знаменателя одного снимка, плата, стипендия и возраст. Крупные числа на странице, не только график · the same figures as the README, with the two denominators up front.
 - [Какие чтения файла неверны](https://github.com/Grigorzelidze/portalegre-student-outcomes/blob/main/docs/decisions.md) — почему один знаменатель, «стипендия = балл поступления» и «ноль зачётов = ранний сигнал» здесь не используются · the readings the file does not support.
 

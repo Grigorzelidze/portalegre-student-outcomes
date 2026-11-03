@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: student
+    columns:
+      - name: target
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["Graduate", "Dropout", "Enrolled"]
+      - name: course
+        tests:
+          - not_null

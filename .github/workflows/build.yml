@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: sudo apt-get update && sudo apt-get install -y postgresql-client unzip
-      - run: pip install pandas==2.3.3
+      - run: pip install -r requirements.txt
       - run: make data
       - run: make build
       - run: make test

@@ -45,7 +45,7 @@ Among finished students who took at least one first-semester unit, 493 of 495 wi
 
 ## Сборка останавливается
 
-`qa.assert_all()` зашита под этот zip. Сборка падает, а не рисует новые проценты, если:
+Пределы зашиты под этот zip и в dbt-тестах, и в `qa.assert_all()`. Сборка падает, а не рисует новые проценты, если:
 
 - строк не 4424;
 - статус вне Graduate, Dropout и Enrolled, статусов не три или кодов программ не 17;
@@ -58,7 +58,7 @@ Among finished students who took at least one first-semester unit, 493 of 495 wi
 
 ## Как посчитать заново
 
-Нужны `psql`, Python 3.9+ и pandas. Если `PGHOST` не задан, `scripts/pg_local.sh` поднимает локальный кластер на `127.0.0.1:54332` с trust-доступом только с этой машины. Каталог данных — `.pgdata`, в git он не входит. В CI кластер не поднимается: workflow уже указывает на Postgres 16. SQL написан так, чтобы его принимал Postgres 16.
+Нужны `psql`, Python 3.9+ и пакеты из `requirements.txt` (pandas и dbt). Если `PGHOST` не задан, `scripts/pg_local.sh` поднимает локальный кластер на `127.0.0.1:54332` с trust-доступом только с этой машины. Каталог данных — `.pgdata`, в git он не входит. В CI кластер не поднимается: workflow уже указывает на Postgres 16. SQL написан так, чтобы его принимал Postgres 16.
 
 ```bash
 make data
@@ -69,7 +69,7 @@ make check
 
 `make data` скачивает zip UCI, сверяет SHA-256 из [`data/SHA256SUMS`](data/SHA256SUMS) и снимает BOM в копию для `\copy`. Pandas читает исходный `data.csv` и проверяет, что BOM и таб в имени колонки на месте.
 
-`make build` грузит строки в `raw`, приводит типы в `clean`, собирает `mart`, прогоняет `qa.assert_all()`, сверяет SQL с независимым пересчётом на pandas и записывает README и страницу.
+`make build` грузит строки в `raw`. Дальше dbt: модель `student` приводит типы в `clean`, витрины собираются в `mart`, dbt-тесты останавливают сборку. Затем `qa.assert_all()` повторяет те же пределы, pandas сверяет витрины независимо, README и страница записываются заново.
 
 `make test` портит одну строку тремя способами и ждёт, что проверка упадёт. Соединение при этом обрывается, правка не сохраняется. Затем JSON выгружается дважды и сравнивается побайтно.
 
@@ -83,9 +83,10 @@ make check
 |---|---|
 | `sql/00_schemas.sql` | схемы `raw`, `clean`, `mart`, `qa` |
 | `sql/10_raw.sql` | 37 текстовых колонок в порядке файла |
-| `sql/20_clean.sql` | типы |
-| `sql/30_marts.sql` | разрезы |
-| `sql/40_checks.sql` | остановка сборки, если файл или витрина разъехались |
+| `models/staging/student.sql` | dbt-модель: типы, таблица `clean.student` |
+| `models/marts/` | dbt-витрины в схеме `mart` |
+| `tests/` | dbt-тесты, которые останавливают `dbt build` |
+| `sql/40_checks.sql` | те же пределы ещё раз, функцией `qa.assert_all()` |
 | `checks/recompute.py` | второй путь: pandas против SQL |
 | `checks/render.py` | README и страница из JSON |
 | `checks/test_controls.py` | сломанная строка должна уронить проверку |
