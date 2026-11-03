@@ -11,6 +11,18 @@
   },
   "age_scholarship": [
     {
+      "age_band": "<=20",
+      "n_graduate": 887,
+      "n_resolved": 1345,
+      "scholarship": "0"
+    },
+    {
+      "age_band": "<=20",
+      "n_graduate": 651,
+      "n_resolved": 735,
+      "scholarship": "1"
+    },
+    {
       "age_band": "21-23",
       "n_graduate": 178,
       "n_resolved": 351,
@@ -44,18 +56,6 @@
       "age_band": "27+",
       "n_graduate": 55,
       "n_resolved": 77,
-      "scholarship": "1"
-    },
-    {
-      "age_band": "<=20",
-      "n_graduate": 887,
-      "n_resolved": 1345,
-      "scholarship": "0"
-    },
-    {
-      "age_band": "<=20",
-      "n_graduate": 651,
-      "n_resolved": 735,
       "scholarship": "1"
     }
   ],

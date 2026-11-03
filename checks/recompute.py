@@ -55,6 +55,9 @@ COLUMNS = [
 ]
 
 
+BAND_ORDER = {"<=20": 0, "21-23": 1, "24-26": 2, "27+": 3}
+
+
 def age_band(age):
     if age <= 20:
         return "<=20"
@@ -115,6 +118,7 @@ def facts_from_frame(frame):
                 "n_graduate": int((part["Target"] == "Graduate").sum()),
             }
         )
+    age_rows.sort(key=lambda row: (BAND_ORDER[row["age_band"]], row["scholarship"]))
     courses = []
     for course, part in frame.groupby("Course", sort=True):
         done = part[part["Target"].isin(["Graduate", "Dropout"])]
@@ -182,9 +186,13 @@ def query_sql():
         "SELECT level, n, n_resolved, n_graduate, n_dropout "
         "FROM mart.by_scholarship ORDER BY level"
     )
+    # Explicit band order: a UTF-8 locale sorts "<=" before digits, C locale does not.
     age = run(
         "SELECT age_band, scholarship, n_resolved, n_graduate "
-        "FROM mart.by_age_scholarship ORDER BY age_band, scholarship"
+        "FROM mart.by_age_scholarship "
+        "ORDER BY CASE age_band "
+        "WHEN '<=20' THEN 1 WHEN '21-23' THEN 2 "
+        "WHEN '24-26' THEN 3 WHEN '27+' THEN 4 END, scholarship"
     )
     sem = run("SELECT grp, n_resolved, n_graduate, n_dropout FROM mart.sem1 ORDER BY grp")
     not_enrolled = run("SELECT n FROM mart.sem1_not_enrolled")[0]

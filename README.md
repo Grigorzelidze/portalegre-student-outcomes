@@ -37,7 +37,7 @@ Among finished students who took at least one first-semester unit, 493 of 495 wi
 
 ## Что открывается
 
-- [Дашборд](dashboard/index.html) — те же два знаменателя, плата, стипендия, возраст и коды программ. Крупные числа и таблица возраста — обычный HTML, они остаются, если Vega с jsDelivr не загрузилась. Графики — Vega-Lite.
+- [Дашборд](https://grigorzelidze.github.io/portalegre-student-outcomes/) — те же два знаменателя, плата, стипендия, возраст и коды программ. Крупные числа и таблица возраста — обычный HTML, они остаются, если Vega с jsDelivr не загрузилась. Графики — Vega-Lite. Исходник страницы: [dashboard/index.html](dashboard/index.html).
 - [`dashboard/data/counts.json`](dashboard/data/counts.json) — счётчики, из которых собраны этот файл и страница.
 - [`docs/decisions.md`](docs/decisions.md) — почему такие разрезы и чего в файле нет.
 

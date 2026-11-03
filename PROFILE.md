@@ -12,6 +12,6 @@ From May 2023 to September 2025 I was ведущий аналитик-проек
 
 **Stack:** SQL (PostgreSQL, ClickHouse) · dbt · Prefect · Python · Yandex DataLens · Git
 
-- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных о студентах политехникума: PostgreSQL от сырого файла до витрины, проверки, которые останавливают сборку, независимый пересчёт на pandas, CI, дашборд. Не данные работодателя · a study on open student-outcome data, not an employer mart
+- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных о студентах политехникума: PostgreSQL от сырого файла до витрины, проверки, которые останавливают сборку, независимый пересчёт на pandas, CI. Не данные работодателя · a study on open student-outcome data, not an employer mart. [Дашборд](https://grigorzelidze.github.io/portalegre-student-outcomes/) открывает готовую страницу.
 
 Офис или удалённо, Москва, без переезда · [Telegram](https://t.me/Grigorzelidze)
