@@ -253,6 +253,7 @@ def render_dashboard(facts):
   <p class="muted">Код программы как в файле. Доля выпустившихся среди завершивших, в подписи — число завершивших. Расшифровку кодов не переписывал по памяти: она в статье Realinho и соавторов, 2022.</p>
   <div id="courses" class="chart"></div>
   <p class="muted">Источник: UCI Machine Learning Repository, набор 697, CC BY 4.0. %(not_enrolled)s человек без записанных предметов первого семестра в сравнение семестра не входят.</p>
+  <p class="muted"><a href="https://github.com/Grigorzelidze/portalegre-student-outcomes/blob/main/docs/decisions.md">Какие чтения этого файла неверны</a></p>
 </main>
 <script>
 const VIEW = @@PAYLOAD@@;

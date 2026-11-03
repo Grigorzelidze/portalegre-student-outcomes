@@ -12,6 +12,8 @@ From May 2023 to September 2025 I was ведущий аналитик-проек
 
 **Stack:** SQL (PostgreSQL, ClickHouse) · dbt · Prefect · Python · Yandex DataLens · Git
 
-- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных о студентах политехникума: PostgreSQL от сырого файла до витрины, проверки, которые останавливают сборку, независимый пересчёт на pandas, CI. Не данные работодателя · a study on open student-outcome data, not an employer mart. [Дашборд](https://grigorzelidze.github.io/portalegre-student-outcomes/) открывает готовую страницу.
+- [portalegre-student-outcomes](https://github.com/Grigorzelidze/portalegre-student-outcomes) — учебный разбор открытых данных, не витрина работодателя. PostgreSQL от сырого файла до витрины, проверки останавливают сборку, рядом независимый пересчёт на pandas и CI · a study on open data, not an employer mart.
+- [Дашборд](https://grigorzelidze.github.io/portalegre-student-outcomes/) — два знаменателя одного снимка, плата, стипендия и возраст. Крупные числа на странице, не только график · the same figures as the README, with the two denominators up front.
+- [Какие чтения файла неверны](https://github.com/Grigorzelidze/portalegre-student-outcomes/blob/main/docs/decisions.md) — почему один знаменатель, «стипендия = балл поступления» и «ноль зачётов = ранний сигнал» здесь не используются · the readings the file does not support.
 
 Офис или удалённо, Москва, без переезда · [Telegram](https://t.me/Grigorzelidze)
